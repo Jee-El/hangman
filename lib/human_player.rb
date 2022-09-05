@@ -1,47 +1,56 @@
 # frozen_string_literal: true
 
+require_relative './display'
+require_relative './validation_regexes'
 require_relative './player'
 
-class HumanPlayer < Player
-  def guess
-    loop do
-      guess = gets.chomp
-      break made_guesses.push(guess) && guess if valid_guess?(guess)
-      break guess if guess == ':w'
+module Hangman
+  class HumanPlayer < Player
+    include ValidationRegexes
+    include Display
 
-      invalid_guess(guess)
+    def guess
+      loop do
+        guess = gets.chomp
+        break made_guesses.push(guess) if valid_guess?(guess)
+
+        break if guess == ':w'
+
+        puts "Guess : #{guess}" || invalid_guess(guess)
+      end
+      puts("Guess : #{guess}") || guess
     end
-  end
 
-  def valid_guess?(guess)
-    guess.gsub(' ', '').match?(/^[a-z]{1}$/i) && !made_guesses.include?(guess)
-  end
-
-  def invalid_guess(guess)
-    return puts 'Not a letter' if made_guesses.include?(guess)
-
-    puts "You've already guessed #{guess}"
-  end
-
-  def secret_word(words)
-    puts 'Press enter to change the list'
-    loop do
-      puts 'Choose one word of this list :'
-      puts words[0, 6].join(', ')
-      word = gets.chomp
-      break word if valid_word?(word, words) || word == ':w'
-
-      next words.rotate!(6) if word.empty?
-
-      invalid_word
+    def valid_guess?(guess)
+      guess.gsub(' ', '').match?(VALID_GUESS[:regex]) && !made_guesses.include?(guess)
     end
-  end
 
-  def valid_word?(word, words)
-    words.include?(word)
-  end
+    def invalid_guess(guess)
+      return puts VALID_GUESS[:error] unless made_guesses.include?(guess)
 
-  def invalid_word
-    puts 'Not a valid word'
+      already_guessed
+    end
+
+    def secret_word(words)
+      show_how_to_change_list
+      loop do
+        print_words_list(words)
+        word = gets.chomp
+        clear_screen
+        break word if valid_word?(word, words)
+
+        next words.rotate!(6) if word.empty?
+
+        invalid_word
+      end
+    end
+
+    def valid_word?(word, words)
+      words.include?(word) || word == ':w'
+    end
+
+    def invalid_word
+      puts 'Not a valid word'
+    end
   end
 end

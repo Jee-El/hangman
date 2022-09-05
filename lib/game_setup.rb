@@ -1,66 +1,72 @@
 # frozen_string_literal: true
 
+require 'tty-prompt'
+
+require_relative './display'
+require_relative './validation_regexes'
 require_relative './human_player'
 require_relative './computer_player'
 
-# Sets game settings
-# i.e word_length, players roles,
-class GameSetup
-  attr_reader :settings
+module Hangman
+  # Sets game settings
+  # i.e word_length, players roles,
+  class GameSetup
+    include ValidationRegexes
+    include Display
 
-  def initialize
-    @settings = {}
-  end
+    attr_reader :settings
 
-  def run
-    @settings[:players] = players
-    @settings[:word_length] = word_length.to_i
-  end
-
-  private
-
-  def input(question, regex, invalid_input_message = nil)
-    print question
-    loop do
-      input = gets.chomp
-      break input if input.match?(regex)
-
-      puts invalid_input_message
+    def initialize
+      clear_screen
+      @prompt = TTY::Prompt.new
+      @settings = {}
     end
-  end
 
-  def word_length
-    input(
-      'Enter the word length, either your word\'s, or computer\'s word : ',
-      /^(2|4|6|8){1}$/,
-      'Enter a number greater than 1'
-    )
-  end
+    def run
+      clarify_rules
+      @settings[:players] = players
+      @settings[:word_length] = word_length
+    end
 
-  def human_player_role
-    input(
-      'Do you wanna pick a word or guess? : '\
-      "\n1 => pick\n2 => guess\n",
-      /^(1|2){1}$/,
-      'Enter 1 or 2'
-    )
-  end
+    private
 
-  def human_player_name
-    input(
-      'Enter your name : ',
-      /.*/
-    )
-  end
+    def word_length
+      puts
+      word_length = @prompt.ask('Enter the secret word\'s length', default: 7) do |q|
+        q.modify :strip
+        q.validate WORD_LENGTH[:regex]
+        q.messages[:valid?] = WORD_LENGTH[:error]
+      end.to_i
+      clear_screen
+      word_length
+    end
 
-  def players
-    players = [
-      ComputerPlayer.new('Computer'),
-      HumanPlayer.new(human_player_name)
-    ]
-    case human_player_role
-    when '1' then players
-    when '2' then players.rotate
+    def human_player_name
+      name = @prompt.ask('Enter your name : ', default: ENV['USER'])
+      clear_screen
+      name
+    end
+
+    def max_guesses
+      puts
+      max_guesses = @prompt.ask('Enter the maximum number of guesses :', default: 7) do |q|
+        q.modify :strip
+        q.validate MAX_GUESSES[:regex]
+        q.messages[:valid?] = MAX_GUESSES[:error]
+      end
+      clear_screen
+      max_guesses
+    end
+
+    def players
+      players = [
+        ComputerPlayer.new('Computer'),
+        HumanPlayer.new(human_player_name)
+      ]
+      case human_player_role
+      when '1' then players
+      when '2' then players.rotate
+      end
     end
   end
 end
