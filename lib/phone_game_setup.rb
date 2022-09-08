@@ -32,7 +32,7 @@ module Hangman
     end
 
     def ask_for_human_player_role
-      roles_by_nums_str = "1 => Word Guesser\n2 => Word Picker\n"
+      roles_by_nums_str = "1 => Word Guesser\n\n2 => Word Picker\n"
       puts
       puts TTY::Box.frame(
         roles_by_nums_str,
