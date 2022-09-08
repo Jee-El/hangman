@@ -21,7 +21,7 @@ module Hangman
               else
                 @guesses_to_make.sample
               end
-      puts("Guess : #{guess}") || puts || guess
+      puts || guess
     end
 
     def secret_word(words)

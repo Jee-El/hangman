@@ -78,8 +78,6 @@ module Hangman
 
     def game_over(word)
       puts
-      puts 'Game Over'
-      puts
       if @guesser.guesses_count == 7
         announce_winner(@picker.name, word)
       else
