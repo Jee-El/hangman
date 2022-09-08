@@ -36,12 +36,16 @@ module Hangman
       puts || puts('Press enter to change the list') || puts
     end
 
-    def already_guessed
-      puts || puts('Please enter a letter') || puts
+    def invalid_word
+      puts 'Not a valid word'
     end
 
-    def announce_winner(winner_name, word)
-      puts || puts("The Secret Word Was : #{word}") || puts
+    def already_guessed(guess)
+      puts || puts("You've already guessed #{guess}") || puts
+    end
+
+    def announce_winner(winner_name)
+      puts || puts("The Secret Word Was : #{@word}") || puts
       puts TTY::Box.frame(
         winner_name,
         padding: [1, 1],

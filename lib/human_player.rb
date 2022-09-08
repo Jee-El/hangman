@@ -16,7 +16,9 @@ module Hangman
 
     def guess
       loop do
+        puts
         guess = gets.chomp
+        puts
         break @guesses.push(guess) && guess if valid_guess?(guess)
 
         break guess if guess == ':w'
@@ -32,7 +34,7 @@ module Hangman
     def invalid_guess(guess)
       return puts VALID_GUESS[:error] unless @guesses.include?(guess)
 
-      already_guessed
+      already_guessed(guess)
     end
 
     def secret_word(words)
@@ -51,10 +53,6 @@ module Hangman
 
     def valid_word?(word, words)
       words.include?(word) || word == ':w'
-    end
-
-    def invalid_word
-      puts 'Not a valid word'
     end
   end
 end
