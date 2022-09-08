@@ -41,13 +41,13 @@ module Hangman
     end
 
     def announce_winner(winner_name, word)
+      puts || puts("The Secret Word Was : #{word}") || puts
       puts TTY::Box.frame(
         winner_name,
         padding: [1, 1],
         align: :center,
         title: { top_center: ' The Winner Is ', bottom_center: ' Good Game ' }
       )
-      puts || puts("The Secret Word Was : #{word}") || puts
     end
 
     def print_words_list(words)
