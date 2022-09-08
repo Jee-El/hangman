@@ -27,10 +27,8 @@ module Hangman
         print 'Enter either the number 1 or 2 : '
         role = gets.chomp
         puts
-        break if valid_role?
+        break clear_screen || role if valid_role?(role)
       end
-      clear_screen
-      role
     end
 
     def ask_for_human_player_role
@@ -44,7 +42,7 @@ module Hangman
       puts
     end
 
-    def valid_role?
+    def valid_role?(role)
       %w[1 2].include?(role)
     end
   end

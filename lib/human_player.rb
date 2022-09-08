@@ -12,13 +12,13 @@ module Hangman
     def guess
       loop do
         guess = gets.chomp
-        break made_guesses.push(guess) if valid_guess?(guess)
+        puts "Guess : #{guess}"
+        break made_guesses.push(guess) && guess if valid_guess?(guess)
 
-        break if guess == ':w'
+        break guess if guess == ':w'
 
-        puts "Guess : #{guess}" || invalid_guess(guess)
+        invalid_guess(guess)
       end
-      puts("Guess : #{guess}") || guess
     end
 
     def valid_guess?(guess)
