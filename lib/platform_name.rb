@@ -6,7 +6,7 @@ module Hangman
   module PlatformName
     def self.get
       platform_names_by_numbers = { '1' => 'phone', '2' => 'computer' }
-      self.ask
+      ask
       loop do
         name = gets.chomp
         break platform_names_by_numbers[name] if name.strip.match?(/^(1|2)$/)
