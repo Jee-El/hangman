@@ -9,11 +9,15 @@ module Hangman
     include ValidationRegexes
     include Display
 
+    def initialize(name)
+      super
+      @guesses = []
+    end
+
     def guess
       loop do
         guess = gets.chomp
-        puts "Guess : #{guess}"
-        break made_guesses.push(guess) && guess if valid_guess?(guess)
+        break @guesses.push(guess) && guess if valid_guess?(guess)
 
         break guess if guess == ':w'
 
@@ -22,11 +26,11 @@ module Hangman
     end
 
     def valid_guess?(guess)
-      guess.gsub(' ', '').match?(VALID_GUESS[:regex]) && !made_guesses.include?(guess)
+      guess.gsub(' ', '').match?(VALID_GUESS[:regex]) && !@guesses.include?(guess)
     end
 
     def invalid_guess(guess)
-      return puts VALID_GUESS[:error] unless made_guesses.include?(guess)
+      return puts VALID_GUESS[:error] unless @guesses.include?(guess)
 
       already_guessed
     end
