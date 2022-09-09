@@ -2,6 +2,11 @@
 
 require 'tty-box'
 
+require_relative './board'
+require_relative './computer_player'
+require_relative './human_player'
+require_relative './game'
+
 module Hangman
   # Messages to be displayed to the player(s)
   module Display
@@ -58,7 +63,7 @@ module Hangman
       puts(words[0, 6].join(', ')) || puts
     end
 
-    def clear_screen
+    def self.clear
       puts "\e[1;1H\e[2J"
     end
   end

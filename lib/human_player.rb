@@ -42,7 +42,7 @@ module Hangman
       loop do
         print_words_list(words)
         word = gets.chomp
-        clear_screen
+        Display.clear
         break word if valid_word?(word, words)
 
         next words.rotate!(6) if word.empty?

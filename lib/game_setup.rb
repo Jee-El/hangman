@@ -17,7 +17,6 @@ module Hangman
     attr_reader :settings
 
     def initialize
-      clear_screen
       @prompt = TTY::Prompt.new
       @settings = {}
     end
@@ -37,13 +36,13 @@ module Hangman
         q.validate WORD_LENGTH[:regex]
         q.messages[:valid?] = WORD_LENGTH[:error]
       end.to_i
-      clear_screen
+      Display.clear
       word_length
     end
 
     def human_player_name
       name = @prompt.ask('Enter your name : ', default: ENV['USER'])
-      clear_screen
+      Display.clear
       name
     end
 
@@ -54,7 +53,7 @@ module Hangman
         q.validate MAX_GUESSES[:regex]
         q.messages[:valid?] = MAX_GUESSES[:error]
       end
-      clear_screen
+      Display.clear
       max_guesses
     end
 
