@@ -20,7 +20,7 @@ module Hangman
     end
 
     def draw(guess, word)
-      update(guess, word) unless guess.nil? || guess.length > 1
+      update(guess, word) unless guess.nil? || guess.length > 1 || guess == ':w'
 
       [slots, wrong_guesses].each { |elem| print(elem) || print(' | ') }
       print(@left_guesses) || 2.times { puts }
