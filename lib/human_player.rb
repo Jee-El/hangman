@@ -1,40 +1,39 @@
 # frozen_string_literal: true
 
+require 'tty-prompt'
+
 require_relative './display'
-require_relative './validation_regexes'
 require_relative './player'
 
 module Hangman
   class HumanPlayer < Player
-    include ValidationRegexes
     include Display
 
     def initialize(name)
       super
+      @prompt = TTY::Prompt.new
       @guesses = []
     end
 
     def guess
-      loop do
-        puts
-        guess = gets.chomp
-        puts
-        break @guesses.push(guess) && guess if valid_guess?(guess)
+      2.times { puts }
+      guess = @prompt.ask('Enter your guess : ') { |q| q.modify :remove, :down }
 
-        break guess if guess == ':w'
+      return guess if guess.nil?
 
-        invalid_guess(guess)
-      end
+      return already_guessed(guess) if already_guessed?(guess)
+
+      return not_a_letter(guess) if not_a_letter?(guess)
+
+      @guesses.push(guess) && guess
     end
 
-    def valid_guess?(guess)
-      guess.gsub(' ', '').match?(VALID_GUESS[:regex]) && !@guesses.include?(guess)
+    def not_a_letter?(guess)
+      !guess.match?(/^[a-z]{1}$/i) && guess != ':w'
     end
 
-    def invalid_guess(guess)
-      return puts VALID_GUESS[:error] unless @guesses.include?(guess)
-
-      already_guessed(guess)
+    def already_guessed?(guess)
+      @guesses.include?(guess)
     end
 
     def secret_word(words)
