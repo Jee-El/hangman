@@ -3,7 +3,6 @@
 require 'tty-prompt'
 
 require_relative './display'
-require_relative './validation_regexes'
 require_relative './human_player'
 require_relative './computer_player'
 
@@ -11,7 +10,6 @@ module Hangman
   # Sets game settings
   # i.e word_length, players roles,
   class GameSetup
-    include ValidationRegexes
     include Display
 
     attr_reader :settings
@@ -25,20 +23,10 @@ module Hangman
       clarify_rules
       @settings[:players] = players
       @settings[:word_length] = word_length
+      @settings[:max_guesses] = max_guesses
     end
 
     private
-
-    def word_length
-      puts
-      word_length = @prompt.ask('Enter the secret word\'s length', default: 7) do |q|
-        q.modify :strip
-        q.validate WORD_LENGTH[:regex]
-        q.messages[:valid?] = WORD_LENGTH[:error]
-      end.to_i
-      Display.clear
-      word_length
-    end
 
     def human_player_name
       name = @prompt.ask('Enter your name : ', default: ENV['USER'])
@@ -46,21 +34,10 @@ module Hangman
       name
     end
 
-    def max_guesses
-      puts
-      max_guesses = @prompt.ask('Enter the maximum number of guesses :', default: 7) do |q|
-        q.modify :strip
-        q.validate MAX_GUESSES[:regex]
-        q.messages[:valid?] = MAX_GUESSES[:error]
-      end
-      Display.clear
-      max_guesses
-    end
-
     def players
       players = [
-        ComputerPlayer.new('Computer'),
-        HumanPlayer.new(human_player_name)
+        HumanPlayer.new(human_player_name),
+        ComputerPlayer.new('Computer')
       ]
       case human_player_role
       when '1' then players
