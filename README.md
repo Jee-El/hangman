@@ -4,6 +4,8 @@
 From [Wikipedia](https://en.wikipedia.org/wiki/Hangman_(game)) :
 > Hangman is a guessing game for two or more players. One player thinks of a word, phrase or sentence and the other(s) tries to guess it by suggesting letters within a certain number of guesses.
 
+Although, in this project, one player can only choose a word from a list of words.
+
 # Main Feature
 
 ## Option to save a game & load it later
