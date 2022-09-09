@@ -28,8 +28,9 @@ def new_game(platform_name)
   words = File.foreach('dictionary.txt').map(&:chomp).filter do |word|
     word.length == game_setup.settings[:word_length]
   end
+  max_guesses = game_setup.settings[:max_guesses]
 
-  game = Hangman::Game.new(*players, words)
+  game = Hangman::Game.new(*players, words, max_guesses)
   game.start
 end
 
