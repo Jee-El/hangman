@@ -2,6 +2,9 @@ require 'tty-box'
 
 module Hangman
   module Display
+    # Display for phone users
+    # It doesn't use some tty-prompt features that can't be used on phone
+    # (e.g: replit on phone)
     module PhoneDisplay
       def clarify_rules
         show_guide
