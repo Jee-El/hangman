@@ -79,7 +79,7 @@ module Hangman
     end
 
     def game_over?
-      !@board.slots.include?('_') || @board.left_guesses == 0
+      !@board.slots.include?('_') || @board.left_guesses.zero?
     end
 
     def game_over
