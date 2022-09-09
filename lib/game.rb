@@ -10,6 +10,11 @@ require_relative './display'
 module Hangman
   # A game of hangman
   class Game
+    @@saved_games = YAML.safe_load(
+      File.read('saved_games.yaml'),
+      permitted_classes: [Board, Game, HumanPlayer, ComputerPlayer, Symbol, Time]
+    ) || {}
+
     include Display
 
     attr_reader :guesser, :picker, :board, :words, :secret_word
@@ -23,10 +28,29 @@ module Hangman
 
     def start
       show_how_to_save_game
+
       @secret_word ||= @picker.secret_word(@words)
+
       save_game if save_game?(@secret_word)
-      puts(@board.slots) || puts
+
+      [@board.slots, @board.wrong_guesses].each { |elem| print(elem) || print(' | ') }
+      print @guesses_count || puts
+
       start_guessing
+    end
+
+    def self.resume?
+      !@@saved_games.empty? && TTY::Prompt.new.yes?('Do you want to resume a game?')
+    end
+
+    def self.load(platform_name)
+      puts
+      case platform_name
+      when 'computer' then saved_game = ComputerDisplay.saved_game_to_load
+      when 'phone' then saved_game = PhoneDisplay.saved_game_to_load
+      end
+      puts
+      saved_game[:game].start
     end
 
     private
@@ -37,7 +61,7 @@ module Hangman
         return save_game if save_game?(guess)
 
         @guesser.guesses_count += 1
-        clear_screen if @guesser.guesses_count.even?
+        Display.clear if @guesser.guesses_count.even?
         @board.update(guess, @secret_word)
       end
       game_over
@@ -48,15 +72,10 @@ module Hangman
     end
 
     def save_game
-      saved_games = YAML.safe_load(
-        File.read('saved_games.yaml'),
-        permitted_classes: [Hangman::Board, Hangman::Game, Hangman::HumanPlayer, Hangman::ComputerPlayer, Symbol]
-      ) || {}
-      saved_games[:saved_games_count] ||= 0
-      saved_games[:saved_games_count] += 1
-      index = saved_games[:saved_games_count]
-      saved_games[:"saved_game_#{index}"] = self
-      File.write('saved_games.yaml', YAML.dump(saved_games), mode: 'a')
+      print 'Name your saved game :'
+      saved_game_name = gets.chomp
+      @@saved_games[:"#{saved_game_name}"] = { timestamp: Time.now, game: self }
+      File.write('saved_games.yaml', YAML.dump(@@saved_games), mode: 'a')
     end
 
     def game_over?
