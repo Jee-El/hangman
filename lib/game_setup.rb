@@ -15,7 +15,6 @@ module Hangman
     attr_reader :settings
 
     def initialize
-      @prompt = TTY::Prompt.new
       @settings = {}
     end
 
@@ -29,7 +28,7 @@ module Hangman
     private
 
     def human_player_name
-      name = @prompt.ask('Enter your name : ', default: ENV['USER'])
+      name = TTY::Prompt.new.ask('Enter your name : ', default: ENV['USER'])
       Display.clear
       name
     end

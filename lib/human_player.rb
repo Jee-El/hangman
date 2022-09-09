@@ -11,13 +11,12 @@ module Hangman
 
     def initialize(name)
       super
-      @prompt = TTY::Prompt.new
       @guesses = []
     end
 
     def guess
       2.times { puts }
-      guess = @prompt.ask('Enter your guess : ') { |q| q.modify :remove, :down }
+      guess = TTY::Prompt.new.ask('Enter your guess : ') { |q| q.modify :remove, :down }
 
       return guess if guess.nil?
 

@@ -22,8 +22,8 @@ module Hangman
       loop do
         index = gets.chomp
 
-        if index.match?(/^#{[*1..SAVED_GAMES.keys.length - 1]}$/)
-          chosen_saved_game_name = saved_games_list.split("\n\n").filter do |saved_game|
+        if index.match?(/^#{[*1..SAVED_GAMES.keys.length]}$/)
+          chosen_saved_game_name = saved_games_list.split("\n\n").find do |saved_game|
             saved_game.start_with?(index)
           end
           chosen_saved_game_name = chosen_saved_game_name.split(' ', 2)[1]
@@ -47,7 +47,7 @@ module Hangman
 
     def word_length
       puts
-      word_length = @prompt.ask(
+      word_length = TTY::Prompt.new.ask(
         'Enter the secret word\'s length',
         default: 7,
         convert: :int
@@ -62,7 +62,7 @@ module Hangman
 
     def max_guesses
       puts
-      max_guesses = @prompt.ask('Enter the maximum number of guesses :', default: 7) do |q|
+      max_guesses = TTY::Prompt.new.ask('Enter the maximum number of guesses :', default: 7) do |q|
         q.modify :strip
         q.in('2-36')
         q.messages[:valid?] = 'Please enter a number.'
@@ -73,7 +73,7 @@ module Hangman
 
     private_class_method def self.list_saved_games
       saved_games_list = ''
-      SAVED_GAMES.keys.each_with_index { |saved_game, i| saved_games_list << i.to_s << '. ' << saved_game << "\n\n" }
+      SAVED_GAMES.keys.each.with_index(1) { |saved_game, i| saved_games_list << i.to_s << '. ' << saved_game << "\n\n" }
       TTY::Box.frame(
         saved_games_list,
         padding: [1, 1],
@@ -83,7 +83,9 @@ module Hangman
     end
 
     private_class_method def self.invalid_index
-      puts "Please enter a number from 1 to #{SAVED_GAMES.keys.length - 1}"
+      return puts 'There is only one saved game. Enter 1 to load it' if SAVED_GAMES.keys.length == 1
+
+      puts "Please enter a number in the range 1-#{SAVED_GAMES.keys.length} (inclusive)"
     end
   end
 end
