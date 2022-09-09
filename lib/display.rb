@@ -37,26 +37,36 @@ module Hangman
       puts || puts(SAVING_GAME) || puts
     end
 
+    def explain_board_format
+      puts || puts('secret word slots | wrong guesses | left guesses') || puts
+    end
+
     def show_how_to_change_list
       puts || puts('Press enter to change the list') || puts
     end
 
     def invalid_word
-      puts 'Not a valid word'
+      puts 'Please enter a word that\'s part of the list'
     end
 
     def already_guessed(guess)
-      puts || puts("You've already guessed #{guess}") || puts
+      "You've already guessed #{guess}"
+    end
+
+    def not_a_letter(guess)
+      "#{guess} is not a letter. Please enter a letter."
     end
 
     def announce_winner(winner_name)
-      puts || puts("The Secret Word Was : #{@word}") || puts
+      puts
+      puts("The Secret Word Was : #{@secret_word}") || puts
       puts TTY::Box.frame(
         winner_name,
         padding: [1, 1],
         align: :center,
         title: { top_center: ' The Winner Is ', bottom_center: ' Good Game ' }
       )
+      puts
     end
 
     def print_words_list(words)
