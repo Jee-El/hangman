@@ -21,6 +21,8 @@ module Hangman
         index = gets.chomp
 
         if index.match?(/^#{[*1..SAVED_GAMES.keys.length]}$/)
+          Display.clear
+
           chosen_saved_game_name = saved_games_list.split("\n\n").find do |saved_game|
             saved_game.start_with?(index)
           end
@@ -74,16 +76,15 @@ module Hangman
       SAVED_GAMES.keys.map(&:to_s).each.with_index(1) do |saved_game, i|
         saved_games_list << i.to_s << '. ' << saved_game << "\n\n"
       end
-      TTY::Box.frame(
-        saved_games_list,
-        padding: [1, 1],
-        title: { top_center: ' Choose a game : ' }
-      )
+      TTY::Box.frame(saved_games_list, padding: [1, 1], title: { top_center: ' Choose a game : ' })
+      puts 'Choose a game :'
+      puts
+      puts saved_games_list
       saved_games_list
     end
 
     private_class_method def self.invalid_index
-      return puts 'There is only one saved game. Enter 1 to load it' if SAVED_GAMES.keys.length == 1
+      return puts || print('There is only one saved game. Enter 1 to load it') if SAVED_GAMES.keys.length == 1
 
       puts "Please enter a number in the range 1-#{SAVED_GAMES.keys.length} (inclusive)"
     end
