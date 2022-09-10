@@ -21,11 +21,15 @@ module Hangman
     def run
       clarify_rules
       @settings[:players] = players
-      @settings[:word_length] = word_length
+      @settings[:words] = words(word_length)
       @settings[:max_guesses] = max_guesses
     end
 
     private
+
+    def words(word_length)
+      File.foreach('dictionary.txt', chomp: true).filter { |word| word.length == word_length }
+    end
 
     def human_player_name
       name = TTY::Prompt.new.ask('Enter your name : ', default: ENV['USER'])
