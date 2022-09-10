@@ -73,8 +73,8 @@ module Hangman
 
     private_class_method def self.list_saved_games
       saved_games_list = ''
-      SAVED_GAMES.keys.map(&:to_s).each.with_index(1) do |saved_game, i|
-        saved_games_list << i.to_s << '. ' << saved_game << "\n\n"
+      SAVED_GAMES.each.with_index(1) do |hash, i|
+        saved_games_list << i.to_s << '. ' << hash[0].to_s << " -> #{hash[1][:timestamp]}" << "\n\n"
       end
       TTY::Box.frame(saved_games_list, padding: [1, 1], title: { top_center: ' Choose a game : ' })
       puts 'Choose a game :'
