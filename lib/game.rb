@@ -50,7 +50,7 @@ module Hangman
       when 'computer' then saved_game = ComputerGameSetup.saved_game_to_load
       when 'phone' then saved_game = PhoneGameSetup.saved_game_to_load
       end
-      puts
+      Display.clear
       saved_game[:game].start
     end
 
