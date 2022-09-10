@@ -18,7 +18,8 @@ module Hangman
     ) || {}
 
     def self.saved_game_to_load
-      saved_game = TTY::Prompt.new.select('Choose a game :', SAVED_GAMES.keys, convert: :symbol)
+      saved_games = SAVED_GAMES.map { |key, value| "#{key} -> #{value[:timestamp]}" }
+      saved_game = TTY::Prompt.new.select('Choose a game :', saved_games, convert: :symbol)
       SAVED_GAMES[saved_game]
     end
 
