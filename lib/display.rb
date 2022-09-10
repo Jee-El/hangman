@@ -29,6 +29,7 @@ module Hangman
     end
 
     def explain_board_format
+      puts 'The board format goes like this : '
       puts || puts('secret word slots | wrong guesses | left guesses') || puts
     end
 
@@ -51,7 +52,7 @@ module Hangman
     def announce_winner(winner_name)
       puts
       puts("The Secret Word Was : #{@secret_word}") || puts
-      puts TTY::Box.frame(
+      puts TTY::Box.success(
         winner_name,
         padding: [1, 1],
         align: :center,
