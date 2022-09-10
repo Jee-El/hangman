@@ -10,11 +10,6 @@ require_relative './game'
 module Hangman
   # Messages to be displayed to the player(s)
   module Display
-    GUIDE = "- As a guesser :\n\n"\
-      "  You have a limited amount of chances\n\n  to guess the secret word.\n\n"\
-      "  Each guess is a letter, regardless of its case (upper/lowercase).\n\n"\
-      "- As a maker :\n\n"\
-      "  You get a list of words to choose a word from.\n"
     WELCOME = "Welcome\n\nTo Hangman"
     SAVING_GAME = 'Type :w any time you want to save & quit the game'
 
@@ -27,10 +22,6 @@ module Hangman
                           style: {  bg: :blue,
                                     fg: :white })
       puts
-    end
-
-    def show_guide
-      puts TTY::Box.frame(GUIDE, padding: [1, 1], border: :ascii)
     end
 
     def show_how_to_save_game
