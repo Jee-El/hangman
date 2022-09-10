@@ -29,6 +29,8 @@ module Hangman
       print guess if guess.length > 1
     end
 
+    private
+
     def update(guess, word)
       if word.include?(guess)
         word.length.times { |i| @slots[i] = guess.green if word[i] == guess }

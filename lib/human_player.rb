@@ -27,14 +27,6 @@ module Hangman
       @guesses.push(guess) && guess
     end
 
-    def not_a_letter?(guess)
-      !guess.match?(/^[a-z]{1}$/i) && guess != ':w'
-    end
-
-    def already_guessed?(guess)
-      @guesses.include?(guess)
-    end
-
     def secret_word(words)
       show_how_to_change_list
       loop do
@@ -47,6 +39,16 @@ module Hangman
 
         invalid_word
       end
+    end
+
+    private
+
+    def not_a_letter?(guess)
+      !guess.match?(/^[a-z]{1}$/i) && guess != ':w'
+    end
+
+    def already_guessed?(guess)
+      @guesses.include?(guess)
     end
 
     def valid_word?(word, words)
