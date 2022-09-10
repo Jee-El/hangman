@@ -40,7 +40,7 @@ module Hangman
 
     def max_guesses
       puts
-      max_guesses = TTY::Prompt.new.slider('Maximum number of guesses : ', (1..36))
+      max_guesses = TTY::Prompt.new.slider('Maximum number of guesses : ', (1..26))
       Display.clear
       max_guesses
     end

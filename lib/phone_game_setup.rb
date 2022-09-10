@@ -64,7 +64,7 @@ module Hangman
       puts
       max_guesses = TTY::Prompt.new.ask('Enter the maximum number of guesses :', default: 7) do |q|
         q.modify :strip
-        q.in('2-36')
+        q.in('2-26')
         q.messages[:valid?] = 'Please enter a number.'
       end
       Display.clear
