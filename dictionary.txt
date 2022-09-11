@@ -4069,7 +4069,6 @@ disaster
 console
 commands
 jr
-telecommunications
 instructor
 giant
 achieved
