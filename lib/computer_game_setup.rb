@@ -33,7 +33,7 @@ module Hangman
 
     def word_length
       puts
-      word_length = TTY::Prompt.new.slider('Word Length : ', 1..18)
+      word_length = TTY::Prompt.new.slider('Word Length : ', 2..16)
       Display.clear
       word_length
     end
