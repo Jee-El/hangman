@@ -34,11 +34,15 @@ module Hangman
     end
 
     def show_how_to_change_list
-      puts || puts('Press enter to change the list') || puts
+      puts || puts('Press enter to change the list.') || puts
     end
 
     def invalid_word
-      puts 'Please enter a word that\'s part of the list'
+      puts 'Please enter a word that\'s part of the list.'
+    end
+
+    def no_input
+      'Please enter a letter.'
     end
 
     def already_guessed(guess)

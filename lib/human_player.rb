@@ -18,7 +18,7 @@ module Hangman
       2.times { puts }
       guess = TTY::Prompt.new.ask('Enter your guess : ') { |q| q.modify :remove, :down }
 
-      return guess if guess.nil?
+      return no_input if no_input?(guess)
 
       return already_guessed(guess) if already_guessed?(guess)
 
@@ -42,6 +42,10 @@ module Hangman
     end
 
     private
+
+    def no_input?(guess)
+      guess.nil?
+    end
 
     def not_a_letter?(guess)
       !guess.match?(/^[a-z]{1}$/i) && guess != ':w'
