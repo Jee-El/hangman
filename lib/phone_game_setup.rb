@@ -51,22 +51,18 @@ module Hangman
         'Enter the secret word\'s length',
         default: 7,
         convert: :int
-      ) do |q|
-        q.modify :strip
-        q.in('2-18')
-        q.messages[:valid?] = 'Please enter a number in the range 2-18 (inclusive)'
-      end
+      ) { |q| q.in('2-16') }
       Display.clear
       word_length
     end
 
     def max_guesses
       puts
-      max_guesses = TTY::Prompt.new.ask('Enter the maximum number of guesses :', default: 7) do |q|
-        q.modify :strip
-        q.in('2-26')
-        q.messages[:valid?] = 'Please enter a number.'
-      end
+      max_guesses = TTY::Prompt.new.ask(
+        'Enter the maximum number of guesses :',
+        default: 7,
+        convert: :int
+      ) { |q| q.in('1-26') }
       Display.clear
       max_guesses
     end
