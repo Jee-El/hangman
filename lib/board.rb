@@ -12,17 +12,18 @@ module Hangman
     end
 
     def slots
-      @slots.join(' ')
+      @slots.map { |slot| slot == '_' ? slot : slot.green }.join(' ')
     end
 
     def wrong_guesses
-      @wrong_guesses.join(' ')
+      @wrong_guesses.map(&:red).join(' ')
     end
 
     def draw(guess, word)
       update(guess, word) unless guess.nil? || guess.length > 1 || guess == ':w'
 
       [slots, wrong_guesses].each { |elem| print(elem) || print(' | ') }
+
       print(@left_guesses) || 2.times { puts }
 
       # Invalid guess message
@@ -33,9 +34,9 @@ module Hangman
 
     def update(guess, word)
       if word.include?(guess)
-        word.length.times { |i| @slots[i] = guess.green if word[i] == guess }
+        word.length.times { |i| @slots[i] = guess if word[i] == guess }
       else
-        @wrong_guesses.push(guess.red)
+        @wrong_guesses.push(guess)
         @left_guesses -= 1
       end
     end
