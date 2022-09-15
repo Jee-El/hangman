@@ -1,16 +1,15 @@
 ---
 :unnamed_0:
-  :timestamp: 2022-09-11 14:31:35.675650551 +01:00
+  :timestamp: 2022-09-15 16:19:26.065976377 +01:00
   :game: !ruby/object:Hangman::Game
     guesser: !ruby/object:Hangman::HumanPlayer
       name: jee-el
       guesses:
-        - f
-        - g
-        - 'y'
-        - h
+        - t
+        - u
+        - i
         - l
-        - ':w'
+        - f
     picker: !ruby/object:Hangman::ComputerPlayer
       name: Computer
       guesses_to_make:
@@ -42,19 +41,19 @@
         - z
     board: !ruby/object:Hangman::Board
       slots:
-        - f
         - _
         - _
         - _
         - _
         - _
+        - t
+        - i
         - _
         - _
-        - g
       wrong_guesses:
-        - 'y'
-        - h
+        - u
         - l
+        - f
       left_guesses: 11
     words:
       - available
@@ -961,4 +960,4 @@
       - swaziland
       - varieties
       - mediawiki
-    secret_word: featuring
+    secret_word: promoting

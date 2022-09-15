@@ -24,7 +24,9 @@ module Hangman
 
       return not_a_letter(guess) if not_a_letter?(guess)
 
-      @guesses.push(guess) && guess
+      @guesses.push(guess) unless guess == ':w'
+
+      guess
     end
 
     def secret_word(words)
