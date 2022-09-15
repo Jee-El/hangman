@@ -10,7 +10,7 @@ require_relative './display'
 module Hangman
   # A game of hangman
   class Game
-    @@saved_games = YAML.safe_load(
+    @saved_games = YAML.safe_load(
       File.read('saved_games.yaml'),
       permitted_classes: [Board, Game, HumanPlayer, ComputerPlayer, Symbol, Time]
     ) || {}
@@ -32,7 +32,7 @@ module Hangman
 
       @secret_word ||= @picker.secret_word(@words)
 
-      save_game if save_game?(@secret_word)
+      Game.save(self) if save_game?(@secret_word)
 
       [@board.slots, @board.wrong_guesses].each { |elem| print(elem) || print(' | ') }
       print @guesses_count
@@ -41,7 +41,7 @@ module Hangman
     end
 
     def self.resume?
-      !@@saved_games.empty? && TTY::Prompt.new.yes?('Do you want to resume a game?')
+      !@saved_games.empty? && TTY::Prompt.new.yes?('Do you want to resume a game?')
     end
 
     def self.load(platform_name)
@@ -54,12 +54,20 @@ module Hangman
       saved_game[:game].start
     end
 
+    def self.save(game)
+      puts
+      name = TTY::Prompt.new.ask('Name your saved game : ', default: "unnamed_#{@saved_games.keys.length}")
+      puts
+      @saved_games[:"#{name}"] = { timestamp: Time.now, game: game }
+      File.write('saved_games.yaml', YAML.dump(@saved_games), mode: 'a')
+    end
+
     private
 
     def start_guessing
       until game_over?
         guess = @guesser.guess
-        return save_game if save_game?(guess)
+        return Game.save(self) if save_game?(guess)
 
         Display.clear
 
@@ -70,12 +78,6 @@ module Hangman
 
     def save_game?(input)
       input == ':w'
-    end
-
-    def save_game
-      name = TTY::Prompt.new.ask('Name your saved game : ', default: "unnamed_#{@@saved_games.keys.length}")
-      @@saved_games[:"#{name}"] = { timestamp: Time.now, game: self }
-      File.write('saved_games.yaml', YAML.dump(@@saved_games), mode: 'a')
     end
 
     def game_over?
