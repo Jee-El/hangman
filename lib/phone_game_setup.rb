@@ -18,16 +18,16 @@ module Hangman
     def self.saved_game_to_load
       saved_games_list = list_saved_games
       loop do
-        index = gets.chomp
+        index = gets.to_i
 
-        if index.match?(/^#{[*1..SAVED_GAMES.keys.length]}$/)
+        if index.between?(1, SAVED_GAMES.keys.length)
           Display.clear
 
           chosen_saved_game_name = saved_games_list.split("\n\n").find do |saved_game|
-            saved_game.start_with?(index)
+            saved_game.start_with?(index.to_s)
           end
-          chosen_saved_game_name = chosen_saved_game_name.split(' ', 2)[1]
-          break SAVED_GAMES[chosen_saved_game_name.to_sym]
+          chosen_saved_game_name = chosen_saved_game_name.split(' ')[1].to_sym
+          break SAVED_GAMES[chosen_saved_game_name]
         end
 
         invalid_index
