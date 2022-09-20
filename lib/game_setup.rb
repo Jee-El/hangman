@@ -2,15 +2,15 @@
 
 require 'tty-prompt'
 
-require_relative './display'
-require_relative './human_player'
-require_relative './computer_player'
+require_relative 'displayable'
+require_relative 'human_player'
+require_relative 'computer_player'
 
 module Hangman
   # Sets game settings
   # i.e word_length, players roles,
   class GameSetup
-    include Display
+    include Displayable
 
     attr_reader :settings
 
@@ -21,20 +21,22 @@ module Hangman
     def run
       clarify_rules
       @settings[:players] = players
+      Displayable.clear
       @settings[:words] = words(word_length)
+      Displayable.clear
       @settings[:max_guesses] = max_guesses
+      Displayable.clear
+      yield(@settings)
     end
 
     private
 
     def words(word_length)
-      File.foreach('dictionary.txt', chomp: true).filter { |word| word.length == word_length }
+      File.foreach('dictionary.txt', chomp: true).select { |word| word.length == word_length }
     end
 
     def human_player_name
-      name = TTY::Prompt.new.ask('Enter your name : ', default: ENV['USER'])
-      Display.clear
-      name
+      TTY::Prompt.new.ask('Enter your name : ', default: ENV['USER'])
     end
 
     def players

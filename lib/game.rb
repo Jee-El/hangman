@@ -2,20 +2,20 @@
 
 require 'yaml'
 
-require_relative './board'
-require_relative './human_player'
-require_relative './computer_player'
-require_relative './display'
+require_relative 'board'
+require_relative 'human_player'
+require_relative 'computer_player'
+require_relative 'displayable'
 
 module Hangman
   # A game of hangman
   class Game
-    @saved_games = YAML.safe_load(
-      File.read('saved_games.yaml'),
+    @saved_games = YAML.safe_load_file(
+      'saved_games.yaml',
       permitted_classes: [Board, Game, HumanPlayer, ComputerPlayer, Symbol, Time]
-    ) || {}
+    ) || []
 
-    include Display
+    include Displayable
 
     attr_reader :guesser, :picker, :board, :words, :secret_word
 
@@ -35,7 +35,6 @@ module Hangman
       Game.save(self) if save_game?(@secret_word)
 
       [@board.slots, @board.wrong_guesses].each { |elem| print(elem) || print(' | ') }
-      print @guesses_count
 
       start_guessing
     end
@@ -46,20 +45,21 @@ module Hangman
 
     def self.load(platform_name)
       puts
-      case platform_name
-      when 'computer' then saved_game = ComputerGameSetup.saved_game_to_load
-      when 'phone' then saved_game = PhoneGameSetup.saved_game_to_load
-      end
-      Display.clear
+      saved_game = case platform_name
+                   when 'computer' then ComputerGameSetup.saved_game_to_load
+                   when 'phone' then PhoneGameSetup.saved_game_to_load
+                   end
+      Displayable.clear
       saved_game[:game].start
     end
 
     def self.save(game)
       puts
-      name = TTY::Prompt.new.ask('Name your saved game : ', default: "unnamed_#{@saved_games.keys.length}")
+      name = TTY::Prompt.new.ask('Name your saved game : ', default: "unnamed_#{@saved_games.length}")
       puts
-      @saved_games[:"#{name}"] = { timestamp: Time.now, game: game }
-      File.write('saved_games.yaml', YAML.dump(@saved_games), mode: 'a')
+      new_saved_game = { name: name, timestamp: Time.now, game: game }
+      @saved_games.push(new_saved_game)
+      File.write('saved_games.yaml', YAML.dump(@saved_games))
     end
 
     private
@@ -69,7 +69,7 @@ module Hangman
         guess = @guesser.guess
         return Game.save(self) if save_game?(guess)
 
-        Display.clear
+        Displayable.clear
 
         @board.draw(guess, @secret_word)
       end
@@ -85,7 +85,7 @@ module Hangman
     end
 
     def game_over
-      if @guesser.guesses_count == 7
+      if @board.left_guesses.zero?
         announce_winner(@picker.name)
       else
         announce_winner(@guesser.name)

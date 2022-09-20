@@ -2,12 +2,12 @@
 
 require 'tty-prompt'
 
-require_relative './display'
-require_relative './player'
+require_relative 'displayable'
+require_relative 'player'
 
 module Hangman
   class HumanPlayer < Player
-    include Display
+    include Displayable
 
     def initialize(name)
       super
@@ -34,7 +34,7 @@ module Hangman
       loop do
         print_words_list(words)
         word = gets.chomp
-        Display.clear
+        Displayable.clear
         break word if valid_word?(word, words)
 
         next words.rotate!(6) if word.empty?

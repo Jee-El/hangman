@@ -2,15 +2,27 @@
 
 require 'tty-box'
 
-require_relative './board'
-require_relative './computer_player'
-require_relative './human_player'
-require_relative './game'
+require_relative 'board'
+require_relative 'computer_player'
+require_relative 'human_player'
+require_relative 'game'
 
 module Hangman
   # Messages to be displayed to the player(s)
-  module Display
+  module Displayable
     WELCOME = "Welcome\n\nTo Hangman"
+    GUIDE = <<~GUIDE
+      As a guesser :
+
+        You have a limited amount of chances  to guess the secret word.
+
+        Each guess is a letter, regardless of its case (upper/lowercase).
+
+
+      As a maker :
+
+        You get a list of words to choose a word from.
+    GUIDE
     SAVING_GAME = 'Type :w any time you want to save & quit the game'
 
     def self.welcome
@@ -25,16 +37,22 @@ module Hangman
     end
 
     def show_how_to_save_game
-      puts || puts(SAVING_GAME) || puts
+      puts
+      puts(SAVING_GAME)
+      puts
     end
 
     def explain_board_format
       puts 'The board format goes like this : '
-      puts || puts('secret word slots | wrong guesses | left guesses') || puts
+      puts
+      puts('secret word slots | wrong guesses | left guesses')
+      puts
     end
 
     def show_how_to_change_list
-      puts || puts('Press enter to change the list.') || puts
+      puts
+      puts('Press enter to change the list.')
+      puts
     end
 
     def invalid_word
@@ -66,7 +84,8 @@ module Hangman
     end
 
     def print_words_list(words)
-      puts(words[0, 6].join(', ')) || puts
+      puts(words[0, 6].join(', '))
+      puts
     end
 
     def self.clear

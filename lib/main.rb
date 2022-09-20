@@ -2,37 +2,34 @@
 
 require 'yaml'
 
-require_relative './platform_name'
-require_relative './display'
-require_relative './computer_game_setup'
-require_relative './phone_game_setup'
-require_relative './game'
+require_relative 'platform_name'
+require_relative 'displayable'
+require_relative 'computer_game_setup'
+require_relative 'phone_game_setup'
+require_relative 'game'
 
 def play
-  Hangman::Display.welcome
+  Hangman::Displayable.welcome
 
-  platform_name = Hangman::Display::PlatformName.get
+  platform_name = Hangman::Displayable::PlatformName.answer
 
-  Hangman::Display.clear
+  Hangman::Displayable.clear
 
   return Hangman::Game.load(platform_name) if Hangman::Game.resume?
 
-  new_game(platform_name)
+  new_game(platform_name).start
 end
 
 def new_game(platform_name)
-  game_setup = get_game_setup(platform_name)
-  game_setup.run
-
-  players = game_setup.settings[:players]
-  words = game_setup.settings[:words]
-  max_guesses = game_setup.settings[:max_guesses]
-
-  game = Hangman::Game.new(*players, words, max_guesses)
-  game.start
+  game_setup(platform_name).run do |settings|
+    players = settings[:players]
+    words = settings[:words]
+    max_guesses = settings[:max_guesses]
+    Hangman::Game.new(*players, words, max_guesses)
+  end
 end
 
-def get_game_setup(platform_name)
+def game_setup(platform_name)
   case platform_name
   when 'phone' then Hangman::PhoneGameSetup.new
   when 'computer' then Hangman::ComputerGameSetup.new

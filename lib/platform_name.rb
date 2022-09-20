@@ -3,20 +3,21 @@
 require 'tty-box'
 
 module Hangman
-  module Display
+  module Displayable
+    # For getting the platform name
     module PlatformName
-      def self.get
+      def self.answer
         platform_names_by_numbers = { '1' => 'phone', '2' => 'computer' }
-        ask
+        question
         loop do
           name = gets.chomp
-          break platform_names_by_numbers[name] if name.strip.match?(/^[12]$/)
+          break platform_names_by_numbers[name] if platform_names_by_numbers[name]
 
           print 'Enter either the number 1 or 2 : '
         end
       end
 
-      def self.ask
+      def self.question
         puts
         puts TTY::Box.frame(
           "1 -> Phone\n\n2 -> Computer",

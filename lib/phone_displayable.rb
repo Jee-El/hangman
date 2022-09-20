@@ -3,17 +3,11 @@
 require 'tty-box'
 
 module Hangman
-  module Display
+  module Displayable
     # Display for phone users
     # It doesn't use some tty-prompt features that can't be used on phone
     # (e.g: replit on phone)
-    module PhoneDisplay
-      GUIDE = "- As a guesser :\n\n"\
-        "  You have a limited amount of chances\n\n  to guess the secret word.\n\n"\
-        "  Each guess is a letter, regardless of its case (upper/lowercase).\n\n"\
-        "- As a maker :\n\n"\
-        "  You get a list of words to choose a word from.\n"
-
+    module PhoneDisplayable
       def clarify_rules
         puts
         show_guide
@@ -23,7 +17,7 @@ module Hangman
           input = gets.chomp
           break if input.empty?
         end
-        Display.clear
+        Displayable.clear
       end
 
       def show_guide
