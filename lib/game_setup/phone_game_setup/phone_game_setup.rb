@@ -2,8 +2,8 @@
 
 require 'tty-box'
 
-require_relative 'game_setup'
-require_relative 'phone_displayable'
+require_relative '../game_setup'
+require_relative '../../displayable/phone_displayable/phone_displayable'
 
 module Hangman
   # Setup for phone users

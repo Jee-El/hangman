@@ -3,10 +3,10 @@
 require 'yaml'
 
 require_relative 'platform_name'
-require_relative 'displayable'
-require_relative 'computer_game_setup'
-require_relative 'phone_game_setup'
-require_relative 'game'
+require_relative 'displayable/displayable'
+require_relative 'game_setup/computer_game_setup/computer_game_setup'
+require_relative 'game_setup/phone_game_setup/phone_game_setup'
+require_relative 'game/game'
 
 def play
   Hangman::Displayable.welcome

@@ -2,9 +2,9 @@
 
 require 'tty-prompt'
 
-require_relative 'displayable'
-require_relative 'human_player'
-require_relative 'computer_player'
+require_relative '../displayable/displayable'
+require_relative '../player/computer_player/computer_player'
+require_relative '../player/human_player/human_player'
 
 module Hangman
   # Sets game settings

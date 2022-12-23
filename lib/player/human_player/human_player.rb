@@ -2,8 +2,8 @@
 
 require 'tty-prompt'
 
-require_relative 'displayable'
-require_relative 'player'
+require_relative '../../displayable/displayable'
+require_relative '../player'
 
 module Hangman
   class HumanPlayer < Player

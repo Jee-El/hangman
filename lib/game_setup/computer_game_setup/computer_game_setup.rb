@@ -2,8 +2,8 @@
 
 require 'tty-prompt'
 
-require_relative 'game_setup'
-require_relative 'computer_displayable'
+require_relative '../game_setup'
+require_relative '../../displayable/computer_displayable/computer_displayable'
 
 module Hangman
   # Setup for computer users

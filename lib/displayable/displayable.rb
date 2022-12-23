@@ -2,10 +2,10 @@
 
 require 'tty-box'
 
-require_relative 'board'
-require_relative 'computer_player'
-require_relative 'human_player'
-require_relative 'game'
+require_relative '../board/board'
+require_relative '../player/computer_player/computer_player'
+require_relative '../player/human_player/human_player'
+require_relative '../game/game'
 
 module Hangman
   # Messages to be displayed to the player(s)

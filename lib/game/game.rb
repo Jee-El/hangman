@@ -2,10 +2,10 @@
 
 require 'yaml'
 
-require_relative 'board'
-require_relative 'human_player'
-require_relative 'computer_player'
-require_relative 'displayable'
+require_relative '../board/board'
+require_relative '../player/human_player/human_player'
+require_relative '../player/computer_player/computer_player'
+require_relative '../displayable/displayable'
 
 module Hangman
   # A game of hangman
